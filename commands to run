@@ -1,0 +1,36 @@
+aws --version
+  
+aws configure
+
+sudo yum update -y
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+export PATH=$PATH:/usr/local/bin
+eksctl version
+
+eksctl create cluster --name reyaz-cluster --region ap-south-1 --node-type t3.small --nodes-min 2 --nodes-max 3
+kubectl get nodes
+
+yum install git -y
+git clone https://github.com/NiteshKumbhare/eks-flask-mysql-project.git
+ls
+cd eks-flask-mysql-project/
+ls
+cd eks-manifests/
+ls
+kubectl apply -f mysql-configmap.yml -f mysql-deployment.yml -f mysql-secrets.yml -f mysql-svc.yml
+kubectl apply -f two-tier-app-deployment.yml -f two-tier-app-svc.yml
+  
+kubectl get all
+kubectl get deploy
+
+eksctl delete cluster --name reyaz-cluster --region ap-south-1
+
+
+
+
